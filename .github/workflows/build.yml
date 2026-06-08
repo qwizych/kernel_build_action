@@ -2,6 +2,43 @@
 name: Build Kernel
 on:
   workflow_dispatch:
+    inputs:
+      kernel-url:
+        description: 'Kernel source URL'
+        required: true
+        default: 'https://github.com/LineageOS/android_kernel_motorola_sm6225'
+      kernel-branch:
+        description: 'Kernel source branch'
+        required: true
+        default: 'lineage-22.1'
+      kernel-dir:
+        description: 'Kernel directory (optional)'
+        required: false
+        default: ''
+      config:
+        description: 'Kernel defconfig'
+        required: true
+        default: 'bengal_defconfig'
+      arch:
+        description: 'Architecture'
+        required: true
+        default: 'arm64'
+      aosp-clang-version:
+        description: 'Clang version (r450784d for Android 14, r487747c for Android 15)'
+        required: true
+        default: 'r487747c'
+      android-version:
+        description: 'Android version'
+        required: true
+        default: '15'
+      ksu:
+        description: 'Enable KSU'
+        required: true
+        default: 'true'
+      ksu-version:
+        description: 'KSU version'
+        required: true
+        default: 'next'
 
 jobs:
   Build-Kernel:
@@ -15,16 +52,16 @@ jobs:
       - name: Build Kernel
         uses: dabao1955/kernel_build_action@main
         with:
-          kernel-url: https://github.com/AcmeUI-Devices/android_kernel_xiaomi_cas
-          kernel-dir: msm-4.19
-          kernel-branch: taffy
-          config: cas_defconfig
-          arch: arm64
+          kernel-url: ${{ github.event.inputs.kernel-url }}
+          kernel-dir: ${{ github.event.inputs.kernel-dir }}
+          kernel-branch: ${{ github.event.inputs.kernel-branch }}
+          config: ${{ github.event.inputs.config }}
+          arch: ${{ github.event.inputs.arch }}
           aosp-gcc: true
           aosp-clang: true
-          ksu: true
-          ksu-version: main
-          android-version: 12
-          aosp-clang-version: r383902
+          ksu: ${{ github.event.inputs.ksu }}
+          ksu-version: ${{ github.event.inputs.ksu-version }}
+          android-version: ${{ github.event.inputs.android-version }}
+          aosp-clang-version: ${{ github.event.inputs.aosp-clang-version }}
           disable-lto: true
           anykernel3: true
