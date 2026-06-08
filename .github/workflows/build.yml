@@ -39,6 +39,10 @@ on:
         description: 'KSU version'
         required: true
         default: 'next'
+      extra-cmds:
+        description: 'Extra build commands (Kprobes config)'
+        required: false
+        default: 'CONFIG_KPROBES=y CONFIG_HAVE_KPROBES=y CONFIG_KPROBE_EVENTS=y CONFIG_OVERLAY_FS=y'
 
 jobs:
   Build-Kernel:
@@ -63,5 +67,6 @@ jobs:
           ksu-version: ${{ github.event.inputs.ksu-version }}
           android-version: ${{ github.event.inputs.android-version }}
           aosp-clang-version: ${{ github.event.inputs.aosp-clang-version }}
+          extra-cmds: ${{ github.event.inputs.extra-cmds }}
           disable-lto: true
           anykernel3: true
